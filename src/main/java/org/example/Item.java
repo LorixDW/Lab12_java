@@ -22,8 +22,9 @@ public class Item {
     @Getter
     @Version
     private long version;
-    public Item(int V){
+    public Item(int V, int version){
         this.value =V;
+        this.version = version;
     }
     @Override
     public String toString(){

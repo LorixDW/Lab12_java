@@ -4,6 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.dialect.lock.OptimisticEntityLockException;
 
 import javax.persistence.OptimisticLockException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
@@ -12,9 +13,10 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         Session session = HibernetUtil.getSessionFactory().openSession();
         session.beginTransaction();
-        List<Item> itemList = session.createQuery("select i from Item i").getResultList();
-        for (Item i: itemList) {
-            i.setValue(0);
+        List<Item> items = new ArrayList<>();
+        for (int i = 0; i < 40; i++) {
+            items.add(new Item(0, 0));
+            session.save(items.get(i));
         }
         session.getTransaction().commit();
         CountDownLatch cdl = new CountDownLatch(8);
